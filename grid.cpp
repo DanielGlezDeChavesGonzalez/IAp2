@@ -32,10 +32,6 @@ std::vector<Nodo> Grid::a_star_euclidean(int x, int y, int x2, int y2) {
         current_index = i;
       }
     }
-
-    std::cout << "Current: " << current->get_x() << ", " << current->get_y()
-              << std::endl;
-
     open_list.erase(open_list.begin() + current_index);
     closed_list.push_back(*current);
 
@@ -44,6 +40,7 @@ std::vector<Nodo> Grid::a_star_euclidean(int x, int y, int x2, int y2) {
       while (current->get_x() != start->get_x() ||
              current->get_y() != start->get_y()) {
         path.push_back(*current);
+        // PROBLEM HERE
         current = current->get_parent();
       }
       return path;
@@ -98,7 +95,12 @@ std::vector<Nodo> Grid::a_star_euclidean(int x, int y, int x2, int y2) {
       children[i].set_g(new_g);
       children[i].set_h(children[i].get_euclidean_distance(end));
       children[i].set_f(children[i].get_g() + children[i].get_h());
+      // PROBLEM HERE
       children[i].set_parent(current);
+      std::cout << "Child: " << children[i].get_x() << ", "
+                << children[i].get_y() << std::endl;
+      std::cout << "parent of child: " << children[i].get_parent()->get_x()
+                << ", " << children[i].get_parent()->get_y() << std::endl;
       open_list.push_back(children[i]);
     }
   }
