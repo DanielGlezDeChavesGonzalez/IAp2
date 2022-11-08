@@ -13,11 +13,11 @@ class Nodo {
   void set_value(int value) { this->value = value; }
   int get_value() { return value; }
 
-  int get_euclidean_distance(Nodo nodo) {
+  float get_euclidean_distance(Nodo nodo) {
     return sqrt(pow(nodo.get_x() - x, 2) + pow(nodo.get_y() - y, 2));
   }
 
-  int get_manhattan_distance(Nodo nodo) {
+  float get_manhattan_distance(Nodo nodo) {
     return abs(nodo.get_x() - x) + abs(nodo.get_y() - y);
   }
 
@@ -40,5 +40,5 @@ class Nodo {
  private:
   int x, y;
   int value;
-  int f, g, h;
+  float f, g, h;
 };

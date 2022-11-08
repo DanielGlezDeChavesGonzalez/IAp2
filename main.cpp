@@ -14,8 +14,6 @@ int main(int argc, char** argv) {
   // std::cin >> n >> m;
   Grid grid(n, m);
 
-  
-
   // for (int i = 0; i < n; i++) {
   //   g.set(i, m / 2, 3);
   // }
@@ -23,16 +21,22 @@ int main(int argc, char** argv) {
   int x, y, x2, y2;
   std::cout << "Introduce x, y, x2, y2: " << std::endl;
   // std::cin >> x >> y >> x2 >> y2;
-  x = 1;
-  y = 1;
-  x2 = 5;
-  y2 = 5;
+  x = 2;
+  y = 2;
+  x2 = 15;
+  y2 = 15;
 
   grid.set(x - 1, y - 1, 1);
   grid.set(x2 - 1, y2 - 1, 2);
 
   std::vector<Nodo> path = grid.a_star_euclidean(x - 1, y - 1, x2 - 1, y2 - 1);
   for (int i = 0; i < path.size(); i++) {
+    if (path[i].get_x() == x - 1 && path[i].get_y() == y - 1) {
+      continue;
+    }
+    if (path[i].get_x() == x2 - 1 && path[i].get_y() == y2 - 1) {
+      continue;
+    }
     grid.set(path[i].get_x(), path[i].get_y(), 3);
   }
   out << "Euclidean" << std::endl;
