@@ -7,7 +7,7 @@
 
 class Grid {
  public:
-    Grid(int n, int m) {
+  Grid(int n, int m) {
     this->n = n;
     this->m = m;
     for (int i = 0; i < n; i++) {
@@ -22,6 +22,8 @@ class Grid {
   Nodo get(int i, int j) { return grid[i][j]; }
   void set(int i, int j, int value) { grid[i][j].set_value(value); }
 
+  int& get_iterations() { return iterations; }
+
   void print(std::ofstream& out);
 
   std::vector<Nodo> a_star_euclidean(int x, int y, int x2, int y2);
@@ -30,4 +32,5 @@ class Grid {
  private:
   int n, m;
   std::vector<std::vector<Nodo>> grid;
+  int iterations = 0;
 };
