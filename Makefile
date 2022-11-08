@@ -1,15 +1,15 @@
 CXX = g++
-CXXFLAGS = -Wall -Werror -Wextra -pedantic -std=c++17 -g 
-LDFLAGS =  
+CXXFLAGS = -std=c++17 -g 
+LDFLAGS = 
 
-SRC = main.cpp grid.cpp
+SRC = main.cpp grid.cpp nodo.cpp
 OBJ = $(SRC:.cc=.o)
 EXEC = main
 
 all: $(EXEC)
 
 $(EXEC): $(OBJ)
-	$(CXX) $(LDFLAGS) -o $@ $(OBJ) $(LBLIBS)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $(OBJ) $(LBLIBS)
 
 clean:
 	rm -rf *.o $(EXEC)

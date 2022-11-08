@@ -14,6 +14,8 @@ int main(int argc, char** argv) {
   // std::cin >> n >> m;
   Grid grid(n, m);
 
+  
+
   // for (int i = 0; i < n; i++) {
   //   g.set(i, m / 2, 3);
   // }
@@ -35,13 +37,24 @@ int main(int argc, char** argv) {
   }
   out << "Euclidean" << std::endl;
   grid.print(out);
-
-  std::vector<Nodo> path_manhattan =
-      grid.a_star_manhattan(x - 1, y - 1, x2 - 1, y2 - 1);
-  for (int i = 0; i < path_manhattan.size(); i++) {
-    grid.set(path_manhattan[i].get_x(), path_manhattan[i].get_y(), 3);
+  std::cout << "Euclidean" << std::endl;
+  for (int i = 0; i < path.size(); i++) {
+    std::cout << "(" << path[i].get_x() << ", " << path[i].get_y() << ")"
+              << std::endl;
   }
-  out << "Manhattan:" << std::endl;
-  grid.print(out);
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < m; j++) {
+      std::cout << grid.get(i, j).get_value() << " ";
+    }
+    std::cout << std::endl;
+  }
+
+  // std::vector<Nodo> path_manhattan =
+  //     grid.a_star_manhattan(x - 1, y - 1, x2 - 1, y2 - 1);
+  // for (int i = 0; i < path_manhattan.size(); i++) {
+  //   grid.set(path_manhattan[i].get_x(), path_manhattan[i].get_y(), 3);
+  // }
+  // out << "Manhattan:" << std::endl;
+  // grid.print(out);
   return 0;
 }

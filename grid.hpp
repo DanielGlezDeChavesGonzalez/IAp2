@@ -7,16 +7,15 @@
 
 class Grid {
  public:
-  Grid(int n, int m) : n(n), m(m) {
-    grid = new Nodo*[n];
+    Grid(int n, int m) {
+    this->n = n;
+    this->m = m;
     for (int i = 0; i < n; i++) {
-      grid[i] = new Nodo[m];
-    }
-    for (int i = 0; i < n; i++) {
+      std::vector<Nodo> row;
       for (int j = 0; j < m; j++) {
-        Nodo* nodo = new Nodo(i, j);
-        grid[i][j] = *nodo;
+        row.push_back(Nodo(i, j));
       }
+      this->grid.push_back(row);
     }
   }
 
@@ -26,10 +25,9 @@ class Grid {
   void print(std::ofstream& out);
 
   std::vector<Nodo> a_star_euclidean(int x, int y, int x2, int y2);
-  std::vector<Nodo> a_star_manhattan(int x, int y, int x2,
-                                                    int y2);
+  std::vector<Nodo> a_star_manhattan(int x, int y, int x2, int y2);
 
  private:
   int n, m;
-  Nodo** grid;
+  std::vector<std::vector<Nodo>> grid;
 };
