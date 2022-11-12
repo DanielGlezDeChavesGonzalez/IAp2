@@ -10,17 +10,22 @@ class Grid {
   Grid(int n, int m) {
     this->n = n;
     this->m = m;
+    this->grid = std::vector<std::vector<std::pair<Nodo,Nodo>>>(n, std::vector<std::pair<Nodo,Nodo>>(m));
     for (int i = 0; i < n; i++) {
-      std::vector<Nodo> row;
       for (int j = 0; j < m; j++) {
-        row.push_back(Nodo(i, j));
+        grid[i][j].first = Nodo(i, j);
+        grid[i][j].second = Nodo(-1, -1);
       }
-      this->grid.push_back(row);
     }
   }
 
-  Nodo get(int i, int j) { return grid[i][j]; }
-  void set(int i, int j, int value) { grid[i][j].set_value(value); }
+  Nodo& get_node(int i, int j) { return grid[i][j].first; }
+  void set_node(int i, int j, int value) { grid[i][j].first.set_value(value); }
+
+  Nodo& get_parent(int i, int j) { return grid[i][j].second; }
+  void set_parent(int i, int j, int value) {
+    grid[i][j].second.set_value(value);
+  }
 
   int& get_iterations() { return iterations; }
 
@@ -31,6 +36,6 @@ class Grid {
 
  private:
   int n, m;
-  std::vector<std::vector<Nodo>> grid;
+  std::vector<std::vector<std::pair<Nodo, Nodo>>> grid;
   int iterations = 0;
 };

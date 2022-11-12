@@ -19,17 +19,9 @@ std::vector<Nodo> Grid::a_star_euclidean(int x, int y, int x2, int y2) {
   std::vector<Nodo> path;
   std::vector<Nodo> open_list;
   std::vector<Nodo> closed_list;
-  std::vector<std::vector<Nodo>> grid_parent(n, std::vector<Nodo>(m));
-  for (int i = 0; i < n; i++) {
-    for (int j = 0; j < m; j++) {
-      grid_parent[i][j] = Nodo(-1, -1);
-    }
-  }
 
-  Nodo start = grid[x][y];
-  Nodo end = grid[x2][y2];
-
-  std::cout << "Start: " << start.get_x() << ", " << start.get_y() << std::endl;
+  Nodo start = grid[x][y].first;
+  Nodo end = grid[x2][y2].first;
 
   start.set_g(0);
   start.set_h(start.get_euclidean_distance(end));
@@ -54,7 +46,7 @@ std::vector<Nodo> Grid::a_star_euclidean(int x, int y, int x2, int y2) {
       while (current.get_x() != start.get_x() ||
              current.get_y() != start.get_y()) {
         path.push_back(current);
-        current = grid_parent[current.get_x()][current.get_y()];
+        current = grid[current.get_x()][current.get_y()].second;
       }
       path.push_back(start);
       return path;
@@ -64,49 +56,34 @@ std::vector<Nodo> Grid::a_star_euclidean(int x, int y, int x2, int y2) {
     int new_g = 0;
 
     if (current.get_x() - 1 >= 0) {
-      children.push_back(grid[current.get_x() - 1][current.get_y()]);
+      children.push_back(grid[current.get_x() - 1][current.get_y()].first);
     }
     if (current.get_x() + 1 < n) {
-      children.push_back(grid[current.get_x() + 1][current.get_y()]);
+      children.push_back(grid[current.get_x() + 1][current.get_y()].first);
     }
     if (current.get_y() - 1 >= 0) {
-      children.push_back(grid[current.get_x()][current.get_y() - 1]);
+      children.push_back(grid[current.get_x()][current.get_y() - 1].first);
     }
     if (current.get_y() + 1 < m) {
-      children.push_back(grid[current.get_x()][current.get_y() + 1]);
+      children.push_back(grid[current.get_x()][current.get_y() + 1].first);
     }
 
     for (int i = 0; i < children.size(); i++) {
-      if (children[i].get_x() < 0 || children[i].get_x() >= n ||
-          children[i].get_y() < 0 || children[i].get_y() >= m) {
+      Nodo child = children[i];
+      if (contains(closed_list, child)) {
         continue;
       }
-      if (grid[children[i].get_x()][children[i].get_y()].get_value() == 1) {
-        continue;
-      }
-      if (contains(closed_list, children[i])) {
-        continue;
-      }
-      if (contains(open_list, children[i])) {
-        new_g = current.get_g() + 1;
-        for (int j = 0; j < open_list.size(); j++) {
-          if (open_list[j].get_x() == children[i].get_x() &&
-              open_list[j].get_y() == children[i].get_y()) {
-            if (new_g < open_list[j].get_g()) {
-              open_list[j].set_g(new_g);
-              open_list[j].set_f(open_list[j].get_g() + open_list[i].get_h());
-              grid_parent[open_list[j].get_x()][open_list[j].get_y()] = current;
-            }
-          }
+      // cambiar g = 1
+      new_g = current.get_g() + 0;
+      if (new_g < child.get_g() || !contains(open_list, child)) {
+        child.set_g(new_g);
+        child.set_h(child.get_euclidean_distance(end));
+        child.set_f(child.get_g() + child.get_h());
+        grid[child.get_x()][child.get_y()].second = current;
+        if (!contains(open_list, child)) {
+          open_list.push_back(child);
         }
-        continue;
       }
-      new_g = current.get_g() + 1;
-      children[i].set_g(new_g);
-      children[i].set_h(children[i].get_euclidean_distance(end));
-      children[i].set_f(children[i].get_g() + children[i].get_h());
-      grid_parent[children[i].get_x()][children[i].get_y()] = current;
-      open_list.push_back(children[i]);
     }
     get_iterations()++;
   }
@@ -119,17 +96,9 @@ std::vector<Nodo> Grid::a_star_manhattan(int x, int y, int x2, int y2) {
   std::vector<Nodo> path;
   std::vector<Nodo> open_list;
   std::vector<Nodo> closed_list;
-  std::vector<std::vector<Nodo>> grid_parent(n, std::vector<Nodo>(m));
-  for (int i = 0; i < n; i++) {
-    for (int j = 0; j < m; j++) {
-      grid_parent[i][j] = Nodo(-1, -1);
-    }
-  }
 
-  Nodo start = grid[x][y];
-  Nodo end = grid[x2][y2];
-
-  std::cout << "Start: " << start.get_x() << ", " << start.get_y() << std::endl;
+  Nodo start = grid[x][y].first;
+  Nodo end = grid[x2][y2].first;
 
   start.set_g(0);
   start.set_h(start.get_manhattan_distance(end));
@@ -154,7 +123,7 @@ std::vector<Nodo> Grid::a_star_manhattan(int x, int y, int x2, int y2) {
       while (current.get_x() != start.get_x() ||
              current.get_y() != start.get_y()) {
         path.push_back(current);
-        current = grid_parent[current.get_x()][current.get_y()];
+        current = grid[current.get_x()][current.get_y()].second;
       }
       path.push_back(start);
       return path;
@@ -164,49 +133,34 @@ std::vector<Nodo> Grid::a_star_manhattan(int x, int y, int x2, int y2) {
     int new_g = 0;
 
     if (current.get_x() - 1 >= 0) {
-      children.push_back(grid[current.get_x() - 1][current.get_y()]);
+      children.push_back(grid[current.get_x() - 1][current.get_y()].first);
     }
     if (current.get_x() + 1 < n) {
-      children.push_back(grid[current.get_x() + 1][current.get_y()]);
+      children.push_back(grid[current.get_x() + 1][current.get_y()].first);
     }
     if (current.get_y() - 1 >= 0) {
-      children.push_back(grid[current.get_x()][current.get_y() - 1]);
+      children.push_back(grid[current.get_x()][current.get_y() - 1].first);
     }
     if (current.get_y() + 1 < m) {
-      children.push_back(grid[current.get_x()][current.get_y() + 1]);
+      children.push_back(grid[current.get_x()][current.get_y() + 1].first);
     }
 
     for (int i = 0; i < children.size(); i++) {
-      if (children[i].get_x() < 0 || children[i].get_x() >= n ||
-          children[i].get_y() < 0 || children[i].get_y() >= m) {
+      Nodo child = children[i];
+      if (contains(closed_list, child)) {
         continue;
       }
-      if (grid[children[i].get_x()][children[i].get_y()].get_value() == 1) {
-        continue;
-      }
-      if (contains(closed_list, children[i])) {
-        continue;
-      }
-      if (contains(open_list, children[i])) {
-        new_g = current.get_g() + 1;
-        for (int j = 0; j < open_list.size(); j++) {
-          if (open_list[j].get_x() == children[i].get_x() &&
-              open_list[j].get_y() == children[i].get_y()) {
-            if (new_g < open_list[j].get_g()) {
-              open_list[j].set_g(new_g);
-              open_list[j].set_f(open_list[j].get_g() + open_list[i].get_h());
-              grid_parent[open_list[j].get_x()][open_list[j].get_y()] = current;
-            }
-          }
+      // cambiar g = 1
+      new_g = current.get_g() + 0;
+      if (new_g < child.get_g() || !contains(open_list, child)) {
+        child.set_g(new_g);
+        child.set_h(child.get_manhattan_distance(end));
+        child.set_f(child.get_g() + child.get_h());
+        grid[child.get_x()][child.get_y()].second = current;
+        if (!contains(open_list, child)) {
+          open_list.push_back(child);
         }
-        continue;
       }
-      new_g = current.get_g() + 1;
-      children[i].set_g(new_g);
-      children[i].set_h(children[i].get_manhattan_distance(end));
-      children[i].set_f(children[i].get_g() + children[i].get_h());
-      grid_parent[children[i].get_x()][children[i].get_y()] = current;
-      open_list.push_back(children[i]);
     }
     get_iterations()++;
   }
@@ -217,7 +171,7 @@ void Grid::print(std::ofstream& out) {
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < m; j++) {
       out << "|";
-      switch (grid[i][j].get_value()) {
+      switch (grid[i][j].first.get_value()) {
         case 0:
           out << " ";
           break;
